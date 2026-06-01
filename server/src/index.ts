@@ -51,9 +51,31 @@ io.on("connection", (socket) => {
 
     socket.join(roomId);
 
-    socket.emit("roomState", room);
+    io.to(roomId).emit("roomState", room);
 
     console.log("room created", room);
+  });
+
+  socket.on("joinRoom", (payload: { roomId: string }) => {
+    const room = rooms.get(payload.roomId);
+
+    if (!room) {
+      socket.emit("errorMessage", "Room not found");
+      return;
+    }
+
+    if (room.players.length >= 2) {
+      socket.emit("errorMessage", "Room is full");
+      return;
+    }
+
+    room.players.push({ id: socket.id });
+
+    socket.join(room.id);
+
+    io.to(room.id).emit("roomState", room);
+
+    console.log("room joined", room);
   });
 });
 
