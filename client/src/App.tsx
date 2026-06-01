@@ -62,7 +62,7 @@ function App() {
 
   return (
     <section id="center">
-      <div>yeppers1</div>
+      <div>yeppers2</div>
       <button onClick={btnHandler}>Ping Server</button>
       <button onClick={btnRoomHandler}>Create Room</button>
 
